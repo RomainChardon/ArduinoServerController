@@ -1,24 +1,28 @@
 #include <LiquidCrystal_I2C.h>
 
-LiquidCrystal_I2C lcd(0x27,20,4);
+LiquidCrystal_I2C lcd(0x27,16,2);
 String value;
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(9600);
   Serial.setTimeout(1);
 
-   lcd.init();                      // initialize the lcd 
-  // Print a message to the LCD.
+  lcd.init();
   lcd.backlight();
-  lcd.setCursor(0,0);
-  lcd.print("Hello, world!");
+  lcd.setCursor(1,0);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  // Mettre en pause si pas de data
   while (!Serial.available());
+  lcd.clear();
+  delay(100);
+
   value = Serial.readString();
   
+  // Affichage sur le LCD
+  lcd.print(value);
+
+  // Envoi vers prumpt Python
   Serial.print(value);
 }
